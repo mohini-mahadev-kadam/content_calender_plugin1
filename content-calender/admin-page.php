@@ -46,10 +46,13 @@ function my_content_calender_menu_page() {
         if (isset($_POST['update'])) {
 
           $postDetails = array('occation' => $_POST['occation'], 'publishedDate' => $_POST['date'], 'post_title' => $_POST['post_title'], 'author' => $_POST['writer'], 'reviewer' => $_POST['reviewer']);
-          $occations = get_option('occation_content', array());      
+          $occations = get_option('occation_content', array());   
+          $occation_index = $_POST['occation_index'];   
           
           // Unserialize the retrieved string into an array of objects
           $unserialized_occations = unserialize($occations);
+
+          unset($unserialized_occations[$occation_index]);
          
           // adding new post details 
           $unserialized_occations[] = $postDetails;
@@ -116,11 +119,13 @@ function my_content_calender_menu_page() {
             echo '<label for="reviewer">Reviewer:</label>';
             echo '<input type="text" id="reviewer" name="reviewer" value="'.esc_html($occation_to_edit['reviewer']).'">';
             
+            echo '<input type="hidden" name="occation_index" value="' . esc_attr($occation_index) . '">';
+
             echo '<input type="submit" name="update" value="Update" class="button button-primary">';
             echo '</form>';
     
 
-            unset($unserialized_occations[$occation_index]);
+            //unset($unserialized_occations[$occation_index]);
 
             // Serialize the object
             $serialized_occations = serialize($unserialized_occations);
@@ -129,7 +134,7 @@ function my_content_calender_menu_page() {
 
 
             // Display a success message
-            echo '<div class="updated"><p>Occation post details deleted!</p></div>';
+            echo '<div class="updated"><p>Occation post details updated!</p></div>';
         }
 
 
